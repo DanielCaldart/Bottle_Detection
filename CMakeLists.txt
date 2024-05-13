@@ -1,0 +1,6 @@
+cmake_minimum_required(VERSION 2.8)
+project( Test )
+find_package( OpenCV REQUIRED )
+include_directories( ${OpenCV_INCLUDE_DIRS} )
+add_executable( Bottle_Detection Bottle_Detection.cpp )
+target_link_libraries( Bottle_Detection ${OpenCV_LIBS} )

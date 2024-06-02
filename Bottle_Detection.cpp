@@ -6,6 +6,13 @@
 using namespace cv;
 using namespace std;
 
+//Font colors
+#define GREEN 0, 255, 0
+#define RED 0, 0, 255
+#define YELLOW 0, 255, 255
+#define PURPLE 255, 0, 255
+#define BLACK 0, 0, 0
+
 //Function prototypes
 void buttonRun(int state, void* userdata);
 void buttonEvaluation(int state, void* userdata);
@@ -44,9 +51,9 @@ bool testTrackbarsResult = 0;
 bool testCalculateAreaResult = 0;
 bool testEvaluationResult = 0;
 
-//////////////////////////////////////////////////////////////////////////////////////////////
-//		Main
-//////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//																				Main																						//
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 int main()
 {
@@ -56,8 +63,8 @@ int main()
 	const int trackThreshDefault = 200;
 
 	int trackAreaValue = 0;
-	const int trackAreaMax = 15000;
-	const int trackAreaDefault = 9000;
+	const int trackAreaMax = 25000;
+	const int trackAreaDefault = 19000;
 
 	int areaBottle = 0;
 	bool evalResult = 0;
@@ -102,7 +109,7 @@ int main()
 	while(waitKey(1) != 27)
 	{
 		cap.read(img);
-		putText( img, "Programm stopped. Run programm or start test sequenz. Press Esc to exit.", Point(20, 50), FONT_HERSHEY_SIMPLEX, 1, Scalar(0, 0, 255), 2);
+		putText( img, "Programm stopped. Run programm or start test sequenz. Press Esc to exit.", Point(20, 50), FONT_HERSHEY_SIMPLEX, 1, Scalar(RED), 2);
 		imshow("Image", img);
 
 		//Loop for bottle programm
@@ -140,7 +147,7 @@ int main()
 		//Tests
 		if(buttonTestsState == 1)
 		{
-			buttonTestsState = 0;
+			resetButtons();
 
 			//Run tests
 			cap.read(img);
@@ -166,9 +173,9 @@ int main()
 	return 0;
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////////
-//	Functions fur buttons
-//////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//																Functions fur buttons																			//
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void buttonRun(int state, void* userdata)
 {
@@ -254,9 +261,9 @@ void buttonTests(int state, void* userdata)
 	}
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////////
-//		Functions for main programm	
-//////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//														Functions for main programm																	//
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //Calculate area of bottle in pixels
 int calculateArea(vector<vector<Point>> contours)
@@ -287,37 +294,37 @@ bool evaluation(vector<vector<Point>> contours, int areaBottle, int trackAreaVal
 //Drwaings form the bottle detection programm onto the image
 void drawings(Mat img, vector<vector<Point>> contours, vector<Rect> boundingRectangle, bool evalResult, int areaBottle)
 {
-	putText( img, "Programm is running.", Point(20, 50), FONT_HERSHEY_SIMPLEX, 1, Scalar(0, 255, 0), 2);
+	putText( img, "Programm is running.", Point(20, 50), FONT_HERSHEY_SIMPLEX, 1, Scalar(GREEN), 2);
 
 	//Draw contours
 	if(buttonContoursState == 1)
 	{
-		drawContours(img, contours, -1, Scalar(255, 0, 255), 2);
+		drawContours(img, contours, -1, Scalar(PURPLE), 2);
 	}
 
 	//Draw outer bounding box, calculate center and draw center
 	if (buttonBoundingBoxState == 1 && boundingRectangle.size() >= 1)
 	{
-		rectangle(img, boundingRectangle[1].tl(), boundingRectangle[1].br(), Scalar(0, 255, 255), 5);
+		rectangle(img, boundingRectangle[1].tl(), boundingRectangle[1].br(), Scalar(YELLOW), 5);
 		Point center = Point(boundingRectangle[1].x + boundingRectangle[1].width / 2 , boundingRectangle[1].y + boundingRectangle[1].height / 2);
-		circle(img, Point(center),10, Scalar(0, 255, 255),-1, 2 ,0);
+		circle(img, Point(center),10, Scalar(YELLOW),-1, 2 ,0);
 	}
 
 	//Print evaluation
 	if(buttonEvaluationState == 1 && evalResult == 1)
 	{
-		putText( img, "Bottle ok", Point(20, 100), FONT_HERSHEY_SIMPLEX, 1, Scalar(0, 255, 0), 2);
+		putText( img, "Bottle ok", Point(20, 100), FONT_HERSHEY_SIMPLEX, 1, Scalar(GREEN), 2);
 	}
 	else if(buttonEvaluationState == 1 && evalResult == 0)
 	{
-		putText( img, "Bottle not ok", Point(20, 100), FONT_HERSHEY_SIMPLEX, 1, Scalar(0, 0, 255), 2);
+		putText( img, "Bottle not ok", Point(20, 100), FONT_HERSHEY_SIMPLEX, 1, Scalar(RED), 2);
 	}
 
 	//Print area size of bottle
 	if(buttonAreaSizeState == 1)
 	{
 		string areaBottleStr = to_string(areaBottle);
-		putText( img, areaBottleStr, Point(20, 150), FONT_HERSHEY_SIMPLEX, 1, Scalar(0, 0, 0), 2);
+		putText( img, areaBottleStr, Point(20, 150), FONT_HERSHEY_SIMPLEX, 1, Scalar(BLACK), 2);
 	}
 }
 
@@ -344,15 +351,15 @@ void showWindows(Mat img, Mat imgGray, Mat imgBlur, Mat imgBinary)
 	waitKey(1);
 }
 
-//////////////////////////////////////////////////////////////////////////////////////////////
-//		Functions for tests	
-//////////////////////////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//																		Functions for tests																		//
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 //Test if the buttons are working correctly
 bool testButtons(Mat img)
 {
-	putText( img, "Test sequenz is running.", Point(20, 50), FONT_HERSHEY_SIMPLEX, 1, Scalar(0, 255, 0), 2);
-	putText( img, "Press all buttons once. Press Esc if you can't finish the test.", Point(20, 100), FONT_HERSHEY_SIMPLEX, 1, Scalar(0, 0, 0), 2);
+	putText( img, "Test sequenz is running.", Point(20, 50), FONT_HERSHEY_SIMPLEX, 1, Scalar(GREEN), 2);
+	putText( img, "Press all buttons once. Press Esc if you can't finish the test.", Point(20, 100), FONT_HERSHEY_SIMPLEX, 1, Scalar(BLACK), 2);
 
 	bool buttonRunPressed = 0;
 	bool buttonEvalPressed = 0;
@@ -367,43 +374,43 @@ bool testButtons(Mat img)
 	{
 		if(buttonRunState == 1)
 		{
-			putText( img, "Run/Stop programm ok.", Point(20, 150), FONT_HERSHEY_SIMPLEX, 1, Scalar(0, 0, 0), 2);
+			putText( img, "Run/Stop programm ok.", Point(20, 150), FONT_HERSHEY_SIMPLEX, 1, Scalar(BLACK), 2);
 			buttonRunPressed = 1;
 		}
 
 		if(buttonEvaluationState == 1)
 		{
-			putText( img, "Show evaluation ok.", Point(20, 200), FONT_HERSHEY_SIMPLEX, 1, Scalar(0, 0, 0), 2);
+			putText( img, "Show evaluation ok.", Point(20, 200), FONT_HERSHEY_SIMPLEX, 1, Scalar(BLACK), 2);
 			buttonEvalPressed = 1;
 		}
 
 		if(buttonContoursState == 1)
 		{
-			putText( img, "Show contours ok.", Point(20, 250), FONT_HERSHEY_SIMPLEX, 1, Scalar(0, 0, 0), 2);
+			putText( img, "Show contours ok.", Point(20, 250), FONT_HERSHEY_SIMPLEX, 1, Scalar(BLACK), 2);
 			buttonContoursPressed = 1;
 		}
 
 		if(buttonAreaSizeState == 1)
 		{
-			putText( img, "Show area size ok.", Point(20, 300), FONT_HERSHEY_SIMPLEX, 1, Scalar(0, 0, 0), 2);
+			putText( img, "Show area size ok.", Point(20, 300), FONT_HERSHEY_SIMPLEX, 1, Scalar(BLACK), 2);
 			buttonAreaPressed = 1;
 		}
 
 		if(buttonBoundingBoxState == 1)
 		{
-			putText( img, "Show bounding box ok.", Point(20, 350), FONT_HERSHEY_SIMPLEX, 1, Scalar(0, 0, 0), 2);
+			putText( img, "Show bounding box ok.", Point(20, 350), FONT_HERSHEY_SIMPLEX, 1, Scalar(BLACK), 2);
 			buttonBbPressed = 1;
 		}
 
 		if(buttonAllWindowsState == 1)
 		{
-			putText( img, "Show all windows ok.", Point(20, 400), FONT_HERSHEY_SIMPLEX, 1, Scalar(0, 0, 0), 2);
+			putText( img, "Show all windows ok.", Point(20, 400), FONT_HERSHEY_SIMPLEX, 1, Scalar(BLACK), 2);
 			buttonWindowsPressed = 1;
 		}
 
 		if(buttonTestsState == 1)
 		{
-			putText( img, "Run tests ok.", Point(20, 450), FONT_HERSHEY_SIMPLEX, 1, Scalar(0, 0, 0), 2);
+			putText( img, "Run tests ok.", Point(20, 450), FONT_HERSHEY_SIMPLEX, 1, Scalar(BLACK), 2);
 			buttonTestsPressed = 1;
 		}
 
@@ -422,8 +429,8 @@ bool testButtons(Mat img)
 //Test if trackbars are working correctly
 bool testTrackbars(Mat img)
 {
-	putText( img, "Test sequenz is running.", Point(20, 50), FONT_HERSHEY_SIMPLEX, 1, Scalar(0, 255, 0), 2);
-	putText( img, "Move each Trackbar to Min and Max. Press Esc if you can't finish the test.", Point(20, 100), FONT_HERSHEY_SIMPLEX, 1, Scalar(0, 0, 0), 2);
+	putText( img, "Test sequenz is running.", Point(20, 50), FONT_HERSHEY_SIMPLEX, 1, Scalar(GREEN), 2);
+	putText( img, "Move each Trackbar to Min and Max. Press Esc if you can't finish the test.", Point(20, 100), FONT_HERSHEY_SIMPLEX, 1, Scalar(BLACK), 2);
 
 	bool thresholdMinResult = 0;
 	bool thresholdMaxResult= 0;
@@ -441,25 +448,25 @@ bool testTrackbars(Mat img)
 
 		if(testTrackThreshValue == 0)
 		{
-			putText( img, "Min value threshold trackbar ok", Point(20, 150), FONT_HERSHEY_SIMPLEX, 1, Scalar(0, 0, 0), 2);
+			putText( img, "Min value threshold trackbar ok", Point(20, 150), FONT_HERSHEY_SIMPLEX, 1, Scalar(BLACK), 2);
 			thresholdMinResult = 1;
 		}
 
 		if(testTrackThreshValue == 255)
 		{
-			putText( img, "Max value threshold trackbar ok", Point(20, 200), FONT_HERSHEY_SIMPLEX, 1, Scalar(0, 0, 0), 2);
+			putText( img, "Max value threshold trackbar ok", Point(20, 200), FONT_HERSHEY_SIMPLEX, 1, Scalar(BLACK), 2);
 			thresholdMaxResult = 1;
 		}
 
 		if(testTrackAreaValue == 0)
 		{
-			putText( img, "Min value area trackbar ok", Point(20, 250), FONT_HERSHEY_SIMPLEX, 1, Scalar(0, 0, 0), 2);
+			putText( img, "Min value area trackbar ok", Point(20, 250), FONT_HERSHEY_SIMPLEX, 1, Scalar(BLACK), 2);
 			areaMinResult = 1;
 		}
 
-		if(testTrackAreaValue == 255)
+		if(testTrackAreaValue == 25000)
 		{
-			putText( img, "Max value area trackbar ok", Point(20, 300), FONT_HERSHEY_SIMPLEX, 1, Scalar(0, 0, 0), 2);
+			putText( img, "Max value area trackbar ok", Point(20, 300), FONT_HERSHEY_SIMPLEX, 1, Scalar(BLACK), 2);
 			areaMaxResult = 1;
 		}
 
@@ -478,8 +485,8 @@ bool testTrackbars(Mat img)
 //Test if function to calculate bottle area in pixel works correctly
 bool testCalculateArea(Mat img)
 {
-	putText( img, "Test sequenz is running.", Point(20, 50), FONT_HERSHEY_SIMPLEX, 1, Scalar(0, 255, 0), 2);
-	putText( img, "Testing calculation of area function.", Point(20, 100), FONT_HERSHEY_SIMPLEX, 1, Scalar(0, 0, 0), 2);
+	putText( img, "Test sequenz is running.", Point(20, 50), FONT_HERSHEY_SIMPLEX, 1, Scalar(GREEN), 2);
+	putText( img, "Testing calculation of area function.", Point(20, 100), FONT_HERSHEY_SIMPLEX, 1, Scalar(BLACK), 2);
 
 	bool areaEmptyResult = 1;
 	bool areaFullResult = 0;
@@ -494,7 +501,7 @@ bool testCalculateArea(Mat img)
 	areaFullResult = calculateArea(testFull);
 
 	imshow("Image", img);
-	waitKey(2000);
+	waitKey(3000);
 
 	//Test is passed when actual results match expected results
 	if(areaEmptyResult == 0 && areaFullResult == 1)
@@ -507,8 +514,8 @@ bool testCalculateArea(Mat img)
 //Test if function to evaluate if bottle is ok works correctly
 bool testEvaluation(Mat img)
 {
-	putText( img, "Test sequenz is running.", Point(20, 50), FONT_HERSHEY_SIMPLEX, 1, Scalar(0, 255, 0), 2);
-	putText( img, "Testing evaluation function.", Point(20, 100), FONT_HERSHEY_SIMPLEX, 1, Scalar(0, 0, 0), 2);
+	putText( img, "Test sequenz is running.", Point(20, 50), FONT_HERSHEY_SIMPLEX, 1, Scalar(GREEN), 2);
+	putText( img, "Testing evaluation function.", Point(20, 100), FONT_HERSHEY_SIMPLEX, 1, Scalar(BLACK), 2);
 
 	bool eval1Result = 1;
 	bool eval2Result = 1;
@@ -533,7 +540,7 @@ bool testEvaluation(Mat img)
 	eval8Result = evaluation(testFull, 1, 1); //expected 0
 
 	imshow("Image", img);
-	waitKey(2000);
+	waitKey(3000);
 
 	//Test is passed when only test 7 returns 1
 	if(eval1Result == 0 && eval2Result == 0 && eval3Result == 0 && eval4Result == 0 &&
@@ -547,45 +554,45 @@ bool testEvaluation(Mat img)
 //Draw results of tests
 void drawTestResults(Mat img)
 {
-	putText( img, "Test sequenz finished.", Point(20, 50), FONT_HERSHEY_SIMPLEX, 1, Scalar(0, 255, 0), 2);
+	putText( img, "Test sequenz finished.", Point(20, 50), FONT_HERSHEY_SIMPLEX, 1, Scalar(GREEN), 2);
 
 	if(testButtonsResult == 1)
 	{
-		putText( img, "Test buttons: passed", Point(20, 150), FONT_HERSHEY_SIMPLEX, 1, Scalar(0, 255, 0), 2);
+		putText( img, "Test buttons: passed", Point(20, 150), FONT_HERSHEY_SIMPLEX, 1, Scalar(GREEN), 2);
 	}
 	else
 	{
-		putText( img, "Test buttons: failed", Point(20, 150), FONT_HERSHEY_SIMPLEX, 1, Scalar(0, 0, 255), 2);
+		putText( img, "Test buttons: failed", Point(20, 150), FONT_HERSHEY_SIMPLEX, 1, Scalar(RED), 2);
 	}
 
 	if(testTrackbarsResult == 1)
 	{
-		putText( img, "Test trackbars: passed", Point(20, 200), FONT_HERSHEY_SIMPLEX, 1, Scalar(0, 255, 0), 2);
+		putText( img, "Test trackbars: passed", Point(20, 200), FONT_HERSHEY_SIMPLEX, 1, Scalar(GREEN), 2);
 	}
 	else
 	{
-		putText( img, "Test trackbars: failed", Point(20, 200), FONT_HERSHEY_SIMPLEX, 1, Scalar(0, 0, 255), 2);
+		putText( img, "Test trackbars: failed", Point(20, 200), FONT_HERSHEY_SIMPLEX, 1, Scalar(RED), 2);
 	}
 
 	if(testCalculateAreaResult == 1)
 	{
-		putText( img, "Test calculate area function: passed", Point(20, 250), FONT_HERSHEY_SIMPLEX, 1, Scalar(0, 255, 0), 2);
+		putText( img, "Test calculate area function: passed", Point(20, 250), FONT_HERSHEY_SIMPLEX, 1, Scalar(GREEN), 2);
 	}
 	else
 	{
-		putText( img, "Test calculate area function: failed", Point(20, 250), FONT_HERSHEY_SIMPLEX, 1, Scalar(0, 0, 255), 2);
+		putText( img, "Test calculate area function: failed", Point(20, 250), FONT_HERSHEY_SIMPLEX, 1, Scalar(RED), 2);
 	}
 
 	if(testEvaluationResult == 1)
 	{
-		putText( img, "Test evaluation function: passed", Point(20, 300), FONT_HERSHEY_SIMPLEX, 1, Scalar(0, 255, 0), 2);
+		putText( img, "Test evaluation function: passed", Point(20, 300), FONT_HERSHEY_SIMPLEX, 1, Scalar(GREEN), 2);
 	}
 	else
 	{
-		putText( img, "Test evaluation function: failed", Point(20, 300), FONT_HERSHEY_SIMPLEX, 1, Scalar(0, 0, 255), 2);
+		putText( img, "Test evaluation function: failed", Point(20, 300), FONT_HERSHEY_SIMPLEX, 1, Scalar(RED), 2);
 	}
 
-	putText( img, "Press Esc to continue.", Point(20, 400), FONT_HERSHEY_SIMPLEX, 1, Scalar(0, 0, 0), 2);
+	putText( img, "Press Esc to continue.", Point(20, 400), FONT_HERSHEY_SIMPLEX, 1, Scalar(BLACK), 2);
 	imshow("Image", img);
 
 	while(waitKey(1) != 27){};

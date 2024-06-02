@@ -27,8 +27,9 @@ Geben Sie den folgenden Befehl ein, um alle diese zu erhalten.
 
 Danach kann das Repository von OpenCV geklont werden.
 
-`git clone https://github.com/opencv/opencv.git
-git -C opencv checkout 4.x`
+`git clone https://github.com/opencv/opencv.git`
+
+`git -C opencv checkout 4.x`
 
 Erstelle ein Build Directory
 

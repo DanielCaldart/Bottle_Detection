@@ -16,6 +16,9 @@ Hierbei ist darauf zu achten, dass für die Detektion eine geeignete Beleuchtung
 Für dieses Projekt wird ein Qt GUI und OpenCV verwendet.
 
 ## Build Instructions
+
+### Qt und OpenCV
+
 Qt kann mit folgendem Befehl installiert werden:
 
 `sudo apt-get install qtbase5-dev`
@@ -50,3 +53,19 @@ Installieren
 Weitere Hilfe und Alternativen gibt es auf der offiziellen Webseite von OpenCV.
 
 https://docs.opencv.org/4.x/d7/d9f/tutorial_linux_install.html
+
+### Programm builden
+
+Es bietet sich an einen eigenen Ordner dafür anzulegen.
+
+`mkdir -p example && cd example`
+
+In diesen Ordner kann dieses Repository geklont werden.
+
+`git clone https://github.com/DanielCaldart/Bottle_Detection.git`
+
+Danach kann das Programm gebuildet werden.
+
+`cmake .`
+
+`make`
